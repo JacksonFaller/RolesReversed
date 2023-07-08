@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] TMP_Text _textMeshPro;
-    private CameraTypeModifiers _cameraTypeModifiers = CameraTypeModifiers.None;
+    public static CameraTypeModifiers ActiveCameraModifiers { get; private set; } = CameraTypeModifiers.None;
+    public static WorldModifiers ActiveWorldModifiers { get; private set; } = WorldModifiers.None;
 
     void Start()
     {
@@ -17,7 +19,8 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            var tablichki = GetVisibleObjects().Select(x => x);
+            ActiveWorldModifiers ^= WorldModifiers.Electricity;
+            UpdateStateText();
         }
     }
 
@@ -41,19 +44,27 @@ public class GameManager : MonoBehaviour
         return visibleObjects;
     }
 
-    public enum CameraTypeModifiers
+    public void UpdateStateText()
     {
-        None,
-        Ice,
-        Warm,
-        Teleport,
-        Springs,
-        Platform
+        _textMeshPro.text = $"Camera mods: {ActiveCameraModifiers}, World mods: {ActiveWorldModifiers}";
     }
 
+    [Flags]
+    public enum CameraTypeModifiers
+    {
+        None = 0,
+        Ice = 1,
+        Warm = 2,
+        Teleport = 4,
+        Springs = 8,
+        Platform = 16
+    }
+
+    [Flags]
     public enum WorldModifiers
     {
-        Electricity,
-        Gravity
+        None = 0,
+        Electricity = 1,
+        Gravity = 2,
     }
 }
