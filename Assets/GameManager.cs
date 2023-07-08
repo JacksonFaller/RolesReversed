@@ -8,8 +8,12 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] TMP_Text _textMeshPro;
-    public static CameraTypeModifiers ActiveCameraModifiers { get; private set; } = CameraTypeModifiers.None;
-    public static WorldModifiers ActiveWorldModifiers { get; private set; } = WorldModifiers.None;
+
+    public static CameraTypeModifier ActiveCameraModifiers { get; private set; } = CameraTypeModifier.None;
+    public static WorldModifier ActiveWorldModifiers { get; private set; } = WorldModifier.None;
+
+    public static event Action<WorldModifier> OnWorldChange;
+    public static event Action<CameraTypeModifier> OnCameraChange;
 
     void Start()
     {
@@ -17,11 +21,34 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            ActiveWorldModifiers ^= WorldModifiers.Electricity;
-            UpdateStateText();
+            ToggleWorldModifier(WorldModifier.Electricity);
         }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            ToggleWorldModifier(WorldModifier.Gravity);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            ToggleCameraModifier(CameraTypeModifier.Platform);
+        }
+    }
+
+    void ToggleCameraModifier(CameraTypeModifier cameraModifier)
+    {
+        ActiveCameraModifiers ^= cameraModifier;
+        UpdateStateText();
+        OnCameraChange(ActiveCameraModifiers);
+    }
+
+    void ToggleWorldModifier(WorldModifier worldModifier)
+    {
+        ActiveWorldModifiers ^= worldModifier;
+        UpdateStateText();
+        OnWorldChange(ActiveWorldModifiers);
     }
 
     public LayerMask objectLayer;
@@ -50,7 +77,7 @@ public class GameManager : MonoBehaviour
     }
 
     [Flags]
-    public enum CameraTypeModifiers
+    public enum CameraTypeModifier
     {
         None = 0,
         Ice = 1,
@@ -61,7 +88,7 @@ public class GameManager : MonoBehaviour
     }
 
     [Flags]
-    public enum WorldModifiers
+    public enum WorldModifier
     {
         None = 0,
         Electricity = 1,

@@ -53,14 +53,15 @@
     <UnityVersion>2020.2.2f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Signs\MoveInstruction.cs" />
-    <Compile Include="Assets\Scripts\CameraController.cs" />
-    <Compile Include="Assets\Configuration.cs" />
-    <Compile Include="Assets\Scripts\CharacterController.cs" />
     <Compile Include="Assets\Scripts\Signs\StopInstruction.cs" />
-    <Compile Include="Assets\Scripts\Signs\JumpInstruction.cs" />
-    <Compile Include="Assets\GameManager.cs" />
+    <Compile Include="Assets\Configuration.cs" />
     <Compile Include="Assets\Scripts\CameraModifiers\ElectricityModifier.cs" />
+    <Compile Include="Assets\Scripts\CameraController.cs" />
+    <Compile Include="Assets\Scripts\Signs\JumpInstruction.cs" />
+    <Compile Include="Assets\Scripts\Signs\MoveInstruction.cs" />
+    <Compile Include="Assets\GameManager.cs" />
+    <Compile Include="Assets\Scripts\CharacterController.cs" />
+    <Compile Include="Assets\PlatformController.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

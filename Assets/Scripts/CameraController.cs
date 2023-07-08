@@ -10,14 +10,34 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float _zoomSpeed = 0.2f;
 
     private Camera _camera;
+    private bool _canMove = true;
+    private bool _platformModActive = false;
+    private PlatformController _platformController;
+  
 
     void Start()
     {
         _camera = GetComponent<Camera>();
+        GameManager.OnCameraChange += GameManager_OnCameraChange;
+        _platformController = GetComponentInChildren<PlatformController>(true);
+    }
+
+    private void GameManager_OnCameraChange(GameManager.CameraTypeModifier cameraModifier)
+    {
+        _platformModActive = cameraModifier.HasFlag(GameManager.CameraTypeModifier.Platform);
+        _platformController.gameObject.SetActive(_platformModActive);
     }
 
     void Update()
     {
+        if (_platformModActive && Input.GetKeyDown(KeyCode.Space))
+        {
+            _canMove = !_canMove;
+            _platformController.TogglePlatform();
+        }
+
+        if (!_canMove) return;
+
         float x = Input.GetAxis(Configuration.Input.HorizontalAxis);
         float y = Input.GetAxis(Configuration.Input.VerticalAxis);
         var zoom = Input.mouseScrollDelta.y;

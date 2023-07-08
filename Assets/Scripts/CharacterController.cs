@@ -8,15 +8,25 @@ public class CharacterController : MonoBehaviour
     [SerializeField] private float _xVelocity = 3.5f;
     [SerializeField] private float _jumpDuration = 1f;
     [SerializeField] private float _jumpVelocity = 52f;
+    [SerializeField] private float _gravityModifier = .5f;
 
     private Rigidbody2D _rigidbody;
     private bool _isJumping;
     private float _jumpTime;
     private bool _isMoving = true;
+    private float _gravity;
 
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+        _gravity = _rigidbody.gravityScale;
+        GameManager.OnWorldChange += GameManager_OnWorldChange;
+    }
+
+    private void GameManager_OnWorldChange(GameManager.WorldModifier worldModifier)
+    {
+        bool gravityModActive = worldModifier.HasFlag(GameManager.WorldModifier.Gravity);
+        _rigidbody.gravityScale = gravityModActive ? _gravityModifier : _gravity;
     }
 
     void Update()
