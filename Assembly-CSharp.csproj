@@ -62,6 +62,7 @@
     <Compile Include="Assets\GameManager.cs" />
     <Compile Include="Assets\Scripts\CharacterController.cs" />
     <Compile Include="Assets\PlatformController.cs" />
+    <Compile Include="Assets\WaterObject.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
