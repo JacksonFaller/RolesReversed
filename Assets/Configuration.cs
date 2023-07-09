@@ -4,12 +4,14 @@ public static class Configuration
 {
     public static class Input
     {
-        
+        public const string HorizontalAxis = "Horizontal";
+        public const string VerticalAxis = "Vertical";
     }
 
     public static class Tags
     {
         public const string Water = "Water";
+        public const string Character = "Character";
     }
 
     public static class LayerMasks

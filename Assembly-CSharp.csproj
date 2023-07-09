@@ -59,10 +59,13 @@
     <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\Signs\JumpInstruction.cs" />
     <Compile Include="Assets\Scripts\Signs\MoveInstruction.cs" />
-    <Compile Include="Assets\GameManager.cs" />
     <Compile Include="Assets\Scripts\CharacterController.cs" />
-    <Compile Include="Assets\PlatformController.cs" />
-    <Compile Include="Assets\WaterObject.cs" />
+    <Compile Include="Assets\Scripts\Enums\WorldModifier.cs" />
+    <Compile Include="Assets\Scripts\WaterObject.cs" />
+    <Compile Include="Assets\Scripts\Enums\CameraTypeModifier.cs" />
+    <Compile Include="Assets\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Teleport.cs" />
+    <Compile Include="Assets\Scripts\PlatformController.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

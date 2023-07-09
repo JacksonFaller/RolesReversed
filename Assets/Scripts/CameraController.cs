@@ -22,9 +22,9 @@ public class CameraController : MonoBehaviour
         _platformController = GetComponentInChildren<PlatformController>(true);
     }
 
-    private void GameManager_OnCameraChange(GameManager.CameraTypeModifier cameraModifier)
+    private void GameManager_OnCameraChange(CameraTypeModifier cameraModifier)
     {
-        _platformModActive = cameraModifier.HasFlag(GameManager.CameraTypeModifier.Platform);
+        _platformModActive = cameraModifier.HasFlag(CameraTypeModifier.Platform);
         _platformController.gameObject.SetActive(_platformModActive);
     }
 

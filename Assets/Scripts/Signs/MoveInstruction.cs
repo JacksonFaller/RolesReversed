@@ -16,9 +16,9 @@ public abstract class MoveInstruction : MonoBehaviour
         GameManager.OnWorldChange += GameManager_OnWorldChange;
     }
 
-    private void GameManager_OnWorldChange(GameManager.WorldModifier worldModifiers)
+    private void GameManager_OnWorldChange(WorldModifier worldModifiers)
     {
-        _isActive = worldModifiers.HasFlag(GameManager.WorldModifier.Electricity);
+        _isActive = worldModifiers.HasFlag(WorldModifier.Electricity);
         _spriteRenderer.color = _isActive ? _activeColor : _inactiveColor;
     }
 
