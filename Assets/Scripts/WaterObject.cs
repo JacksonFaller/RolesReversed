@@ -16,11 +16,6 @@ public class WaterObject : MonoBehaviour
         _spriteRenderer.color = _waterColor;
     }
 
-    void Update()
-    {
-        
-    }
-
     public void Freeze()
     {
         gameObject.layer = Configuration.Layers.Ice;

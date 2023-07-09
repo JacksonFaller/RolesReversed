@@ -25,7 +25,7 @@ public class CharacterController : MonoBehaviour
 
     private void GameManager_OnWorldChange(WorldModifier worldModifier)
     {
-        bool gravityModActive = worldModifier.HasFlag(WorldModifier.Gravity);
+        bool gravityModActive = worldModifier == WorldModifier.Gravity;
         _rigidbody.gravityScale = gravityModActive ? _gravityModifier : _gravity;
     }
 

@@ -9,6 +9,7 @@ public partial class GameManager : MonoBehaviour
     [SerializeField] TMP_Text _textMeshPro;
     [SerializeField] float _maxEnergy = 10f;
     [SerializeField] float _freezeEnergyCostPerSecond = 1f;
+    [SerializeField] float _melteEnergyCostPerSecond = 1f;
     [SerializeField] float _teleportEnergyCost = 1f;
 
     public static GameManager Instance { get; private set; }
@@ -44,7 +45,6 @@ public partial class GameManager : MonoBehaviour
             ToggleCameraModifier(CameraTypeModifier.Platform);
         }
 
-
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             StartCoroutine(FreezeWater());
@@ -52,25 +52,58 @@ public partial class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            if (!ActiveCameraModifiers.HasFlag(CameraTypeModifier.Teleport))
+            StartCoroutine(MeltIce());
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            ToggleCameraModifier(CameraTypeModifier.Springs);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            if (ActiveCameraModifiers == CameraTypeModifier.Teleport)
             {
-                if (_curEnergy >= _teleportEnergyCost)
-                {
-                    _curEnergy -= _teleportEnergyCost;
-                    ToggleCameraModifier(CameraTypeModifier.Teleport);
-                }
+                ResetCameraModifier();
             }
-            else
+            else if (_curEnergy >= _teleportEnergyCost)
             {
-                ToggleCameraModifier(CameraTypeModifier.Teleport);
+                _curEnergy -= _teleportEnergyCost;
+                SetCameraModifier(CameraTypeModifier.Teleport);
             }
+        }
+    }
+
+    IEnumerator MeltIce()
+    {
+        ToggleCameraModifier(CameraTypeModifier.Warm);
+
+        while (ActiveCameraModifiers == CameraTypeModifier.Warm && _curEnergy > 0f)
+        {
+            var waterObjects = GetVisibleObjects(Configuration.LayerMasks.Ice)
+                .Select(x => x.GetComponent<WaterObject>());
+
+            foreach (var waterObject in waterObjects)
+            {
+                waterObject.Melt();
+            }
+
+            yield return new WaitForFixedUpdate();
+            _curEnergy -= Time.fixedDeltaTime * _melteEnergyCostPerSecond;
+        }
+
+        if (_curEnergy <= 0f)
+        {
+            ResetCameraModifier();
+            _curEnergy = 0f;
         }
     }
 
     IEnumerator FreezeWater()
     {
         ToggleCameraModifier(CameraTypeModifier.Ice);
-        while (ActiveCameraModifiers.HasFlag(CameraTypeModifier.Ice) && _curEnergy > 0f)
+
+        while (ActiveCameraModifiers == CameraTypeModifier.Ice && _curEnergy > 0f)
         {
             var waterObjects = GetVisibleObjects(Configuration.LayerMasks.Water)
                 .Select(x => x.GetComponent<WaterObject>());
@@ -86,14 +119,18 @@ public partial class GameManager : MonoBehaviour
 
         if (_curEnergy <= 0f)
         {
-            ToggleCameraModifier(CameraTypeModifier.Ice);
+            ResetCameraModifier();
             _curEnergy = 0f;
         }
     }
 
-    public void ToggleCameraModifier(CameraTypeModifier cameraModifier)
+    public void ToggleCameraModifier(CameraTypeModifier cameraModifier) => SetCameraModifier(ActiveCameraModifiers == cameraModifier ? CameraTypeModifier.None : cameraModifier);
+
+    public void ResetCameraModifier() => SetCameraModifier(CameraTypeModifier.None);
+
+    public void SetCameraModifier(CameraTypeModifier cameraModifier)
     {
-        ActiveCameraModifiers ^= cameraModifier;
+        ActiveCameraModifiers = cameraModifier;
         UpdateStateText();
         OnCameraChange(ActiveCameraModifiers);
     }
